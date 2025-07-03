@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file: .env
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  web:
+    build:
+      context: ./src
+    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./src:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file: .env
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
