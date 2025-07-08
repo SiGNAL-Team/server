@@ -1,0 +1,32 @@
+<!-- prettier-ignore -->
+{% load i18n %}
+{% with limit_count_fx=limit_count|default:"9999" %}
+
+<div class="">
+  {% if std_count is not None %}
+  <div class="d-flex flex-column align-items-end" style="min-width: 80px">
+    <small class="font-monospace text-end mb-1" style="font-size: 0.75rem">
+      {{ std_count }}/{% if limit_count %}{{ limit_count }}{% else %}??{% endif %}
+    </small>
+    <div style="height: 4px; width: 100%; position: relative; overflow: hidden; border-radius: 2px; background-color: #e9ecef">
+      {% widthratio std_count limit_count_fx 100 as percentage %}
+      <!-- Full gradient background -->
+      <div
+        style="
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to right, #28a745 0%, #ffc107 50%, #dc3545 100%);
+          position: absolute;
+          top: 0;
+          left: 0;
+        "
+      ></div>
+      <!-- Gray overlay covering everything beyond the percentage -->
+      <div style="width: 100%; height: 100%; background: #e9ecef; position: absolute; top: 0; left: {{ percentage }}%;"></div>
+    </div>
+  </div>
+  {% else %}
+  <span class="text-muted font-monospace" style="font-size: 0.75rem">{% trans '-' %}</span>
+  {% endif %}
+</div>
+{% endwith %}

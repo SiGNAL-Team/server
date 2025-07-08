@@ -1,0 +1,162 @@
+<!-- prettier-ignore -->
+{% extends "ustc/base.html" %}
+{% load i18n %}
+{% load ustc_extras %}
+{% block title %}{{ section.course|translated_name }} - {% trans "Section Detail" %}{% endblock %}
+
+{% block content %}
+{% trans "N/A" as na_text %}
+
+<div class="mt-4 mb-3">
+  <div class="detail-header">
+    <div>
+      <a href="{% url 'ustc:section-list' %}" class="subtle-link">{% trans 'View all sections' %}</a>
+      <h1 class="mb-0">{{ section.course|translated_name }}</h1>
+      <span class="mb-0 detail-code">{{ section.code }}</span>
+    </div>
+
+    <div class="detail-info-grid mb-4">
+      <div>
+        <div class="detail-info-label">{% trans 'Semester' %}</div>
+        <div>
+          {% if section.semester %}
+          <a
+            href="{% url 'ustc:semester-detail' section.semester.pk %}"
+            class="subtle-link text-body"
+            data-bs-toggle="tooltip"
+            data-bs-title="{{ section.semester.start_date|date:'Y.m.d' }} - {{ section.semester.end_date|date:'Y.m.d' }}"
+          >
+            {{ section.semester }}
+          </a>
+          {% else %}
+          <span class="text-muted">{{ na_text }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Campus' %}</div>
+        <div>
+          {% if section.campus %}
+          <a href="{% url 'ustc:campus-detail' section.campus.pk %}" class="subtle-link">{{ section.campus|translated_name }}</a>
+          {% else %}{{ na_text }}{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Opening Department' %}</div>
+        <div>
+          {% if section.open_department %}
+          <a href="{% url 'ustc:department-detail' section.open_department.pk %}" class="subtle-link"
+            >{{ section.open_department|translated_name }}</a
+          >
+          {% else %}{{ na_text }}{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-width: 1.5pt; border-style: solid; border-color: #eee; border-radius: 0.25rem; padding: 1rem">
+    <div class="detail-info-grid">
+      <div>
+        <div class="detail-info-label">{% trans 'Course Code' %}</div>
+        <div>
+          <a href="{% url 'ustc:course-detail' section.course.pk %}" class="subtle-link"> {{ section.course.code }} </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Exam Mode' %}</div>
+        <div>
+          {% if section.exam_mode %}
+          <span>{{ section.exam_mode|translated_name }}</span>
+          {% else %}{{ na_text }}{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Teaching Language' %}</div>
+        <div>
+          {% if section.teach_language %}
+          <span>{{ section.teach_language|translated_name }}</span>
+          {% else %}{{ na_text }}{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Graduate & Postgraduate' %}</div>
+        <div>
+          {% if section.graduate_and_postgraduate %}
+          <span class="badge bg-success">{% trans 'Yes' %}</span>
+          {% elif section.graduate_and_postgraduate == False %}
+          <span class="badge bg-secondary">{% trans 'No' %}</span>
+          {% else %}
+          <span class="badge bg-light text-dark">{{ na_text }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="flex-grow-1"></div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Period (Hours)' %}</div>
+        <div>{{ section.period|default:na_text }}</div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Periods per Week' %}</div>
+        <div>{{ section.periods_per_week|default:na_text }}</div>
+      </div>
+
+      <div>
+        <div class="detail-info-label">{% trans 'Credits' %}</div>
+        <div>{{ section.credits|default:na_text }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <h4 class="mb-3">{% trans 'Teachers' %}</h4>
+  {% if section.teachers.all %}
+  <div class="row mb-4">
+    {% for teacher in section.teachers.all %}
+    <div class="col-md-2 mb-2">
+      <a
+        href="{% url 'ustc:teacher-detail' teacher.pk %}"
+        class="btn btn-outline-primary w-100"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        data-bs-title="{% if teacher.department %}{{ teacher.department|translated_name }}{% endif %}"
+      >
+        {{ teacher|translated_name }}
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="mb-4">{% trans 'No teachers assigned.' %}</p>
+  {% endif %}
+
+  <h4 class="mb-3">{% trans 'Admin Classes' %}</h4>
+  {% if section.admin_classes.all %}
+  <div class="row mb-4">
+    {% for admin_class in section.admin_classes.all %}
+    <div class="col-md-2 mb-2">
+      <a href="{% url 'ustc:admin-class-detail' admin_class.pk %}" class="btn btn-outline-secondary w-100">{{ admin_class|translated_name }}</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="mb-4">{% trans 'No admin classes assigned.' %}</p>
+  {% endif %}
+
+  <!-- prettier-ignore -->
+  {% if section.date_time_place_text %}
+  <h4 class="mb-3">{% trans 'Schedule Information' %}</h4>
+  <pre class="mb-4">{{ section.date_time_place_text }}</pre>
+  {% endif %}
+</div>
+
+<!-- prettire-ignore -->
+{% endblock %}

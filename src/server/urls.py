@@ -16,8 +16,12 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),  # Language switching URLs
+    path("", RedirectView.as_view(url="/ustc/", permanent=False)),  # Redirect root to ustc
+    path("ustc/", include("ustc.urls")),  # Main app URLs without language prefix
 ]

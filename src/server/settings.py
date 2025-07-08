@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",  # Add locale middleware
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -63,6 +64,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",  # Add i18n context processor
             ],
         },
     },
@@ -108,13 +110,27 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "zh-cn"  # Default to Chinese
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Shanghai"  # Set China timezone
 
 USE_I18N = True
 
 USE_TZ = True
+
+# Language settings
+LANGUAGES = [
+    ('zh-cn', '简体中文'),
+    ('en', 'English'),
+]
+
+# Locale paths
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+# Use browser language detection by default, but allow session override
+USE_L10N = True
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,0 +1,103 @@
+<!-- prettier-ignore -->
+{% extends "ustc/base.html" %}
+{% load i18n %}
+{% load ustc_extras %}
+{% block title %}{{ semester.name }} - {% trans "SiGNAL" %}{% endblock %}
+
+{% block content %}
+{% trans "N/A" as na_text %}
+
+<div class="detail-header">
+  <div>
+    <a href="{% url 'ustc:semester-list' %}" class="subtle-link">{% trans 'View all semesters' %}</a>
+    <div class="text-start gap-2">
+      <h1 class="mb-0">{{ semester.name }}</h1>
+      <span class="mb-0 text-muted">{{ semester.start_date|date:"Y.m.d" }} - {{ semester.end_date|date:"Y.m.d" }}</span>
+    </div>
+  </div>  </div>
+
+<h4 class="mb-3">{% trans "Sections in this Semester" %}</h4>
+
+  <!-- Search and Filter Form -->
+  <div class="mb-4">
+    <form method="get" class="row g-3" id="search-form">
+      <div class="col-md-3">
+        <input type="text" name="q" class="form-control" placeholder="{% trans 'Search sections...' %}" value="{{ search_query|default:'' }}">
+      </div>
+      <div class="col-md-3">
+        <select name="department" class="form-select">
+          <option value="">{% trans 'All Departments' %}</option>
+          {% for dept in departments %}
+          <option value="{{ dept.id }}" {% if department_filter == dept.id|stringformat:"i" %}selected{% endif %}>
+            {{ dept|translated_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select name="campus" class="form-select">
+          <option value="">{% trans 'All Campuses' %}</option>
+          {% for campus in campuses %}
+          <option value="{{ campus.id }}" {% if campus_filter == campus.id|stringformat:"i" %}selected{% endif %}>
+            {{ campus|translated_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select name="exam_mode" class="form-select">
+          <option value="">{% trans 'All Exam Modes' %}</option>
+          {% for exam_mode in exam_modes %}
+          <option value="{{ exam_mode.id }}" {% if exam_mode_filter == exam_mode.id|stringformat:"i" %}selected{% endif %}>
+            {{ exam_mode|translated_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">{% trans 'Filter' %}</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Results count -->
+  {% include 'ustc/partials/result_count.html' with item_name="sections" %}
+
+  {% include 'ustc/partials/section_table.html' with sections=sections show_semester=False empty_message="No sections found for this semester." %}
+  
+  <!-- Pagination -->
+  {% include 'ustc/partials/pagination.html' %}
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('input[name="q"]');
+    const departmentSelect = document.querySelector('select[name="department"]');
+    const campusSelect = document.querySelector('select[name="campus"]');
+    const examModeSelect = document.querySelector('select[name="exam_mode"]');
+    let searchTimeout;
+
+    function performSearch() {
+        const form = document.getElementById('search-form');
+        if (form) {
+            form.submit();
+        }
+    }
+
+    // Instant filter on select changes
+    if (departmentSelect) {
+        departmentSelect.addEventListener('change', performSearch);
+    }
+    
+    if (campusSelect) {
+        campusSelect.addEventListener('change', performSearch);
+    }
+    
+    if (examModeSelect) {
+        examModeSelect.addEventListener('change', performSearch);
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% load i18n %}
+<div class="mb-3">
+  <small class="text-muted">
+    <!-- prettier-ignore -->
+    {% trans 'Showing' %} {{ page_obj.start_index }} - {{ page_obj.end_index }} {% trans 'of' %} {{ page_obj.paginator.count }} {% trans item_name %}
+    {% if request.GET.q or request.GET.department or request.GET.campus or request.GET.exam_mode or request.GET.course or request.GET.semester or request.GET.teacher or request.GET.type or request.GET.education_level %}
+      ({% trans 'filtered' %})
+    {% endif %}
+  </small>
+</div>

@@ -1,0 +1,107 @@
+<!-- prettier-ignore -->
+{% load i18n %}
+{% load ustc_extras %}
+{% trans "N/A" as na_text %}
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover" id="sectionsTable">
+    <thead>
+      <tr>
+        {% if show_semester %}
+        <th>{% trans "Semester" %}</th>
+        {% endif %}
+        <th>{% trans "Code" %}</th>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Credits" %}</th>
+        <th>{% trans "Teachers" %}</th>
+        <th>{% trans "Department" %}</th>
+        <th>{% trans "Campus" %}</th>
+        <th>{% trans "Exam Mode" %}</th>
+        <th>{% trans "Enrollment" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for section in sections %}
+      <tr
+        class="clickable-row"
+        onclick="window.location='{% url "ustc:section-detail" section.id %}'"
+      >
+        {% if show_semester %}
+        <td class="text-truncate" style="max-width: 150px;">
+
+          {% if section.semester %}
+          <a href="{% url 'ustc:semester-detail' section.semester.pk %}" class="subtle-link text-body"
+             data-bs-toggle="tooltip"
+             data-bs-title="{{ section.semester.start_date|date:"Y.m.d" }} - {{ section.semester.end_date|date:"Y.m.d" }}">
+            {{ section.semester }}
+          </a>
+          {% else %}
+          {{ na_text }}
+          {% endif %}
+        </td>
+        {% endif %}
+
+        <td>{{ section.code }}</td>
+
+        <td class="text-truncate" style="max-width: 200px;">
+          {{ section.course|translated_name }}
+        </td>
+
+        <td>{{ section.credits|default:na_text }}</td>
+
+        <td class="text-truncate" style="max-width: 150px;">
+          {% if section.teachers.exists %}
+            {% for teacher in section.teachers.all %}
+            <a href="{% url 'ustc:teacher-detail' teacher.pk %}" 
+               class="text-decoration-none text-body"
+               data-bs-toggle="tooltip"
+               data-bs-title="{{ teacher.department|translated_name }}">
+              {{ teacher|translated_name }}
+            </a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          {% else %}
+          {{ na_text }}
+          {% endif %}
+        </td>
+
+        <td class="text-truncate" style="max-width: 150px;">
+          {% if section.open_department %}
+          <a href="{% url 'ustc:department-detail' section.open_department.pk %}" 
+             class="text-decoration-none text-body">
+            {{ section.open_department|translated_name }}
+          </a>
+          {% else %}
+          {{ na_text }}
+          {% endif %}
+        </td>
+
+        <td class="text-truncate" style="max-width: 100px;">
+          {% if section.campus %}
+          <a href="{% url 'ustc:campus-detail' section.campus.pk %}" 
+             class="text-decoration-none text-body">
+            {{ section.campus|translated_name }}
+          </a>
+          {% else %}
+          {{ na_text }}
+          {% endif %}
+        </td>
+
+        <td class="text-truncate" style="max-width: 120px;">
+          {{ section.exam_mode|translated_name|default:na_text }}
+        </td>
+
+        <td>
+          {% include 'ustc/partials/enrollment_display.html' with std_count=section.std_count limit_count=section.limit_count %}
+        </td>
+      </tr>
+
+      {% empty %}
+      <tr>
+        <td colspan="{% if show_semester %}9{% else %}8{% endif %}">
+          {% if empty_message %}{{ empty_message }}{% else %}{% trans "No sections found." %}{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
