@@ -1,15 +1,23 @@
 {
     "name": "Django Dev",
-    "dockerComposeFile": ["../docker-compose.yml"],
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
     "service": "web",
     "workspaceFolder": "/app",
     "customizations": {
         "vscode": {
-            "extensions": ["ms-python.python", "ms-azuretools.vscode-docker"],
+            "extensions": [
+                "ms-python.python",
+                "ms-python.autopep8",
+                "ms-azuretools.vscode-docker",
+                "GitHub.copilot",
+                "esbenp.prettier-vscode"
+            ],
             "settings": {
                 "python.defaultInterpreterPath": "/usr/local/bin/python"
             }
         }
     },
-    "postCreateCommand": "pip install -r requirements.txt"
+    "postCreateCommand": "apt-get update && apt-get install -y git && pip install -r requirements.txt"
 }
