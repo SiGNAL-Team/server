@@ -4,7 +4,7 @@
 
 ### APIs
 
-All following API endpoints are prefixed with `/ustc/api/v1/`.
+All following API endpoints are prefixed with `/api/v1/ustc/`.
 
 - `GET /<model>/id/<id>`: Fetch a specific record by internal ID.
 - `GET /<model>/jw-id/<id>`: Fetch a specific record by JW ID.

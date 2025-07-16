@@ -59,6 +59,46 @@ class SectionViewSet(BaseViewSet):
     serializer_class = SectionSerializer
 
 
+class CourseTypeViewSet(viewsets.ModelViewSet):
+    queryset = CourseType.objects.all()
+    serializer_class = CourseTypeSerializer
+
+
+class CourseGradationViewSet(viewsets.ModelViewSet):
+    queryset = CourseGradation.objects.all()
+    serializer_class = CourseGradationSerializer
+
+
+class CourseCategoryViewSet(viewsets.ModelViewSet):
+    queryset = CourseCategory.objects.all()
+    serializer_class = CourseCategorySerializer
+
+
+class CourseClassifyViewSet(viewsets.ModelViewSet):
+    queryset = CourseClassify.objects.all()
+    serializer_class = CourseClassifySerializer
+
+
+class ExamModeViewSet(viewsets.ModelViewSet):
+    queryset = ExamMode.objects.all()
+    serializer_class = ExamModeSerializer
+
+
+class TeachLanguageViewSet(viewsets.ModelViewSet):
+    queryset = TeachLanguage.objects.all()
+    serializer_class = TeachLanguageSerializer
+
+
+class EducationLevelViewSet(viewsets.ModelViewSet):
+    queryset = EducationLevel.objects.all()
+    serializer_class = EducationLevelSerializer
+
+
+class ClassTypeViewSet(viewsets.ModelViewSet):
+    queryset = ClassType.objects.all()
+    serializer_class = ClassTypeSerializer
+
+
 def home(request):
     """Home page view"""
     context = {
