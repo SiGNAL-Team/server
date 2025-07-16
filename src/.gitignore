@@ -1,2 +1,3 @@
-cache_fetch_timetable.sqlite
+*.sqlite
+data/
 **/*.mo
