@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SiGNAL 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 14:23+0800\n"
+"POT-Creation-Date: 2025-07-16 22:43+0800\n"
 "PO-Revision-Date: 2025-07-05 12:02+0800\n"
 "Last-Translator: SiGNAL Team\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -27,7 +27,7 @@ msgstr "行政班详情"
 #: ustc/templates/ustc/partials/section_table.html:4
 #: ustc/templates/ustc/section_detail.html:8
 #: ustc/templates/ustc/semester_detail.html:8
-#: ustc/templates/ustc/teacher_detail.html:18
+#: ustc/templates/ustc/teacher_detail.html:8
 msgid "N/A"
 msgstr "暂无"
 
@@ -41,13 +41,13 @@ msgstr "该行政班的开课信息"
 
 #: ustc/templates/ustc/admin_class_list.html:5
 #: ustc/templates/ustc/admin_class_list.html:10
-#: ustc/templates/ustc/base.html:293
-#: ustc/templates/ustc/section_detail.html:217
+#: ustc/templates/ustc/base.html:371
+#: ustc/templates/ustc/section_detail.html:141
 msgid "Admin Classes"
 msgstr "行政班"
 
 #: ustc/templates/ustc/admin_class_list.html:5 ustc/templates/ustc/base.html:10
-#: ustc/templates/ustc/base.html:229 ustc/templates/ustc/base.html:334
+#: ustc/templates/ustc/base.html:309 ustc/templates/ustc/base.html:412
 #: ustc/templates/ustc/campus_list.html:5
 #: ustc/templates/ustc/course_detail.html:5
 #: ustc/templates/ustc/course_list.html:5
@@ -79,49 +79,49 @@ msgstr "行政班"
 msgid "No admin classes found."
 msgstr "未找到行政班。"
 
-#: ustc/templates/ustc/base.html:245 ustc/templates/ustc/home.html:17
+#: ustc/templates/ustc/base.html:325 ustc/templates/ustc/home.html:17
 #: ustc/templates/ustc/semester_list.html:5
 #: ustc/templates/ustc/semester_list.html:10
 msgid "Semesters"
 msgstr "学期"
 
-#: ustc/templates/ustc/base.html:250 ustc/templates/ustc/course_list.html:5
+#: ustc/templates/ustc/base.html:330 ustc/templates/ustc/course_list.html:5
 #: ustc/templates/ustc/course_list.html:12 ustc/templates/ustc/home.html:26
 msgid "Courses"
 msgstr "课程"
 
-#: ustc/templates/ustc/base.html:255 ustc/templates/ustc/home.html:44
+#: ustc/templates/ustc/base.html:335 ustc/templates/ustc/home.html:44
 #: ustc/templates/ustc/partials/section_table.html:16
-#: ustc/templates/ustc/section_detail.html:190
+#: ustc/templates/ustc/section_detail.html:120
 #: ustc/templates/ustc/teacher_list.html:5
 #: ustc/templates/ustc/teacher_list.html:10
 msgid "Teachers"
 msgstr "教师"
 
-#: ustc/templates/ustc/base.html:260 ustc/templates/ustc/home.html:35
+#: ustc/templates/ustc/base.html:340 ustc/templates/ustc/home.html:35
 #: ustc/templates/ustc/section_list.html:5
 msgid "Sections"
 msgstr "开课信息"
 
-#: ustc/templates/ustc/base.html:272
+#: ustc/templates/ustc/base.html:352
 msgid "More"
 msgstr "更多"
 
-#: ustc/templates/ustc/base.html:279 ustc/templates/ustc/department_list.html:5
+#: ustc/templates/ustc/base.html:359 ustc/templates/ustc/department_list.html:5
 #: ustc/templates/ustc/department_list.html:10
 msgid "Departments"
 msgstr "院系"
 
-#: ustc/templates/ustc/base.html:286 ustc/templates/ustc/campus_list.html:5
+#: ustc/templates/ustc/base.html:364 ustc/templates/ustc/campus_list.html:5
 #: ustc/templates/ustc/campus_list.html:10
 msgid "Campuses"
 msgstr "校区"
 
-#: ustc/templates/ustc/base.html:297
+#: ustc/templates/ustc/base.html:375
 msgid "Admin Panel"
 msgstr "管理后台"
 
-#: ustc/templates/ustc/base.html:334
+#: ustc/templates/ustc/base.html:412
 msgid "All Rights Reserved"
 msgstr "版权所有"
 
@@ -196,9 +196,8 @@ msgstr "课程"
 #: ustc/templates/ustc/course_list.html:50
 #: ustc/templates/ustc/department_list.html:40
 #: ustc/templates/ustc/partials/section_table.html:13
-#: ustc/templates/ustc/section_detail.html:27
-#: ustc/templates/ustc/section_detail.html:64
-#: ustc/templates/ustc/teacher_detail.html:112
+#: ustc/templates/ustc/teacher_detail.html:48
+#: ustc/templates/ustc/teacher_detail.html:97
 msgid "Code"
 msgstr "代码"
 
@@ -247,10 +246,8 @@ msgstr "学院"
 
 #: ustc/templates/ustc/department_detail.html:26
 #: ustc/templates/ustc/partials/section_table.html:17
-#: ustc/templates/ustc/section_detail.html:64
-#: ustc/templates/ustc/section_detail.html:202
-#: ustc/templates/ustc/teacher_detail.html:30
-#: ustc/templates/ustc/teacher_detail.html:112
+#: ustc/templates/ustc/teacher_detail.html:19
+#: ustc/templates/ustc/teacher_detail.html:97
 #: ustc/templates/ustc/teacher_list.html:41
 msgid "Department"
 msgstr "院系"
@@ -272,10 +269,8 @@ msgid "Home"
 msgstr "首页"
 
 #: ustc/templates/ustc/home.html:10
-msgid ""
-"Welcome to the University of Science and Technology of China Timetable "
-"system."
-msgstr "欢迎使用中国科学技术大学课表系统。"
+msgid "Welcome to SiGNAL."
+msgstr "欢迎使用 SiGNAL"
 
 #: ustc/templates/ustc/home.html:19
 msgid "Browse Semesters"
@@ -333,8 +328,8 @@ msgstr "API 浏览器"
 msgid "for interactive documentation."
 msgstr "获取交互式文档。"
 
-#: ustc/templates/ustc/partials/enrollment_display.html:17
-#: ustc/templates/ustc/teacher_detail.html:125
+#: ustc/templates/ustc/partials/enrollment_display.html:29
+#: ustc/templates/ustc/teacher_detail.html:116
 msgid "-"
 msgstr "-"
 
@@ -371,35 +366,33 @@ msgid "filtered"
 msgstr "筛选后"
 
 #: ustc/templates/ustc/partials/section_table.html:11
-#: ustc/templates/ustc/section_detail.html:21
+#: ustc/templates/ustc/section_detail.html:20
 msgid "Semester"
 msgstr "学期"
 
 #: ustc/templates/ustc/partials/section_table.html:15
-#: ustc/templates/ustc/section_detail.html:34
-#: ustc/templates/ustc/section_detail.html:126
-#: ustc/templates/ustc/teacher_detail.html:61
-#: ustc/templates/ustc/teacher_detail.html:100
+#: ustc/templates/ustc/section_detail.html:112
+#: ustc/templates/ustc/teacher_detail.html:51
+#: ustc/templates/ustc/teacher_detail.html:106
 msgid "Credits"
 msgstr "学分"
 
 #: ustc/templates/ustc/partials/section_table.html:18
 #: ustc/templates/ustc/section_detail.html:38
-#: ustc/templates/ustc/section_detail.html:90
 msgid "Campus"
 msgstr "校区"
 
 #: ustc/templates/ustc/partials/section_table.html:19
-#: ustc/templates/ustc/section_detail.html:108
+#: ustc/templates/ustc/section_detail.html:69
 msgid "Exam Mode"
 msgstr "考试方式"
 
 #: ustc/templates/ustc/partials/section_table.html:20
-#: ustc/templates/ustc/teacher_detail.html:60
+#: ustc/templates/ustc/teacher_detail.html:50
 msgid "Enrollment"
 msgstr "选课人数"
 
-#: ustc/templates/ustc/partials/section_table.html:88
+#: ustc/templates/ustc/partials/section_table.html:101
 msgid "No sections found."
 msgstr "未找到开课信息。"
 
@@ -407,104 +400,51 @@ msgstr "未找到开课信息。"
 msgid "Section Detail"
 msgstr "开课信息详情"
 
-#: ustc/templates/ustc/section_detail.html:12
+#: ustc/templates/ustc/section_detail.html:13
 msgid "View all sections"
 msgstr "查看所有开课信息"
 
-#: ustc/templates/ustc/section_detail.html:27
-msgid "Start"
-msgstr "开始"
-
-#: ustc/templates/ustc/section_detail.html:27
-msgid "End"
-msgstr "结束"
-
-#: ustc/templates/ustc/section_detail.html:46
-#: ustc/templates/ustc/section_detail.html:82
+#: ustc/templates/ustc/section_detail.html:47
 msgid "Opening Department"
 msgstr "开课院系"
 
-#: ustc/templates/ustc/section_detail.html:56
-msgid "Course Information"
-msgstr "课程信息"
-
-#: ustc/templates/ustc/section_detail.html:59
-msgid "Course Name"
-msgstr "课程名称"
-
-#: ustc/templates/ustc/section_detail.html:70
+#: ustc/templates/ustc/section_detail.html:62
 msgid "Course Code"
 msgstr "课程代码"
 
-#: ustc/templates/ustc/section_detail.html:77
-msgid "Section Details"
-msgstr "开课详情"
-
-#: ustc/templates/ustc/section_detail.html:100
+#: ustc/templates/ustc/section_detail.html:78
 msgid "Teaching Language"
 msgstr "授课语言"
 
-#: ustc/templates/ustc/section_detail.html:121
-msgid "Academic Information"
-msgstr "学术信息"
+#: ustc/templates/ustc/section_detail.html:87
+msgid "Graduate & Postgraduate"
+msgstr "本研同堂"
 
-#: ustc/templates/ustc/section_detail.html:130
+#: ustc/templates/ustc/section_detail.html:90
+msgid "Yes"
+msgstr "是"
+
+#: ustc/templates/ustc/section_detail.html:92
+msgid "No"
+msgstr "否"
+
+#: ustc/templates/ustc/section_detail.html:102
 msgid "Period (Hours)"
 msgstr "课时"
 
-#: ustc/templates/ustc/section_detail.html:134
+#: ustc/templates/ustc/section_detail.html:107
 msgid "Periods per Week"
 msgstr "周课时"
 
 #: ustc/templates/ustc/section_detail.html:138
-msgid "Graduate & Postgraduate"
-msgstr "本研同堂"
-
-#: ustc/templates/ustc/section_detail.html:141
-msgid "Yes"
-msgstr "是"
-
-#: ustc/templates/ustc/section_detail.html:143
-msgid "No"
-msgstr "否"
-
-#: ustc/templates/ustc/section_detail.html:155
-msgid "Enrollment Information"
-msgstr "选课信息"
-
-#: ustc/templates/ustc/section_detail.html:160
-msgid "Current Students"
-msgstr "当前选课人数"
-
-#: ustc/templates/ustc/section_detail.html:169
-msgid "Student Limit"
-msgstr "选课上限"
-
-#: ustc/templates/ustc/section_detail.html:173
-msgid "Availability"
-msgstr "选课状态"
-
-#: ustc/templates/ustc/section_detail.html:176
-msgid "Full"
-msgstr "已满"
-
-#: ustc/templates/ustc/section_detail.html:178
-msgid "Available"
-msgstr "可选"
-
-#: ustc/templates/ustc/section_detail.html:180
-msgid "Unknown"
-msgstr "未知"
-
-#: ustc/templates/ustc/section_detail.html:210
 msgid "No teachers assigned."
 msgstr "未分配教师。"
 
-#: ustc/templates/ustc/section_detail.html:229
+#: ustc/templates/ustc/section_detail.html:151
 msgid "No admin classes assigned."
 msgstr "未分配行政班。"
 
-#: ustc/templates/ustc/section_detail.html:237
+#: ustc/templates/ustc/section_detail.html:156
 msgid "Schedule Information"
 msgstr "课程安排信息"
 
@@ -557,56 +497,50 @@ msgstr "学期"
 msgid "No semesters found."
 msgstr "未找到学期。"
 
-#: ustc/templates/ustc/teacher_detail.html:8
-#: ustc/templates/ustc/teacher_detail.html:163
-msgid "Expand All"
-msgstr "展开全部"
-
-#: ustc/templates/ustc/teacher_detail.html:14
-#: ustc/templates/ustc/teacher_detail.html:44
-#: ustc/templates/ustc/teacher_detail.html:169
-msgid "Collapse All"
-msgstr "全部收起"
-
-#: ustc/templates/ustc/teacher_detail.html:22
+#: ustc/templates/ustc/teacher_detail.html:11
 msgid "View all teachers"
 msgstr "查看所有教师"
 
-#: ustc/templates/ustc/teacher_detail.html:41
+#: ustc/templates/ustc/teacher_detail.html:30
 msgid "Sections Taught"
 msgstr "任教课程"
 
-#: ustc/templates/ustc/teacher_detail.html:47
-#: ustc/templates/ustc/teacher_detail.html:212
+#: ustc/templates/ustc/teacher_detail.html:33
+#: ustc/templates/ustc/teacher_detail.html:162
+msgid "Collapse All"
+msgstr "全部收起"
+
+#: ustc/templates/ustc/teacher_detail.html:36
+#: ustc/templates/ustc/teacher_detail.html:205
 msgid "Oldest First"
 msgstr "按时间排序"
 
-#: ustc/templates/ustc/teacher_detail.html:58
-msgid "Section"
-msgstr "开课信息"
-
-#: ustc/templates/ustc/teacher_detail.html:59
+#: ustc/templates/ustc/teacher_detail.html:47
 msgid "Course"
 msgstr "课程"
 
+#: ustc/templates/ustc/teacher_detail.html:69
 #: ustc/templates/ustc/teacher_detail.html:78
-#: ustc/templates/ustc/teacher_detail.html:88
 msgid "section"
 msgstr "门课程"
 
-#: ustc/templates/ustc/teacher_detail.html:86
+#: ustc/templates/ustc/teacher_detail.html:76
 msgid "No Semester Specified"
 msgstr "未指定学期"
 
-#: ustc/templates/ustc/teacher_detail.html:100
+#: ustc/templates/ustc/teacher_detail.html:106
 msgid "Students"
 msgstr "学生"
 
-#: ustc/templates/ustc/teacher_detail.html:132
+#: ustc/templates/ustc/teacher_detail.html:125
 msgid "This teacher has not taught any sections yet."
 msgstr "该教师尚未任教任何课程。"
 
-#: ustc/templates/ustc/teacher_detail.html:209
+#: ustc/templates/ustc/teacher_detail.html:156
+msgid "Expand All"
+msgstr "展开全部"
+
+#: ustc/templates/ustc/teacher_detail.html:202
 msgid "Newest First"
 msgstr "最新优先"
 
@@ -621,6 +555,53 @@ msgstr "教师"
 #: ustc/templates/ustc/teacher_list.html:53
 msgid "No teachers found."
 msgstr "未找到教师。"
+
+#~ msgid ""
+#~ "Welcome to the University of Science and Technology of China Timetable "
+#~ "system."
+#~ msgstr "欢迎使用中国科学技术大学课表系统。"
+
+#~ msgid "Start"
+#~ msgstr "开始"
+
+#~ msgid "End"
+#~ msgstr "结束"
+
+#~ msgid "Course Information"
+#~ msgstr "课程信息"
+
+#~ msgid "Course Name"
+#~ msgstr "课程名称"
+
+#~ msgid "Section Details"
+#~ msgstr "开课详情"
+
+#~ msgid "Academic Information"
+#~ msgstr "学术信息"
+
+#~ msgid "Enrollment Information"
+#~ msgstr "选课信息"
+
+#~ msgid "Current Students"
+#~ msgstr "当前选课人数"
+
+#~ msgid "Student Limit"
+#~ msgstr "选课上限"
+
+#~ msgid "Availability"
+#~ msgstr "选课状态"
+
+#~ msgid "Full"
+#~ msgstr "已满"
+
+#~ msgid "Available"
+#~ msgstr "可选"
+
+#~ msgid "Unknown"
+#~ msgstr "未知"
+
+#~ msgid "Section"
+#~ msgstr "开课信息"
 
 #~ msgid "Back to List"
 #~ msgstr "返回列表"
