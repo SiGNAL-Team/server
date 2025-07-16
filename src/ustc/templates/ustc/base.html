@@ -15,80 +15,80 @@
         --bs-primary: #6f42c1;
         --bs-primary-rgb: 111, 66, 193;
       }
-      
+
       .bg-primary {
         background-color: #6f42c1 !important;
       }
-      
+
       .btn-primary {
         background-color: #6f42c1;
         border-color: #6f42c1;
       }
-      
+
       .btn-primary:hover {
         background-color: #5c359a;
         border-color: #5c359a;
       }
-      
+
       .btn-outline-primary {
         color: #6f42c1;
         border-color: #6f42c1;
       }
-      
+
       .btn-outline-primary:hover {
         color: white;
         background-color: #6f42c1;
         border-color: #6f42c1;
       }
-      
+
       .btn-outline-primary:focus {
         box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
       }
-      
+
       /* Background color styling to match purple theme */
       .bg-info {
         background-color: rgba(111, 66, 193, 0.8) !important;
         color: white;
       }
-      
+
       /* Table styling to match purple theme */
       .table-info {
         --bs-table-bg: rgba(111, 66, 193, 0.1);
         border-color: rgba(111, 66, 193, 0.2);
       }
-      
+
       .table-warning {
         --bs-table-bg: rgba(111, 66, 193, 0.05);
         border-color: rgba(111, 66, 193, 0.15);
       }
-      
+
       .table-light {
         --bs-table-bg: rgba(111, 66, 193, 0.03);
         border-color: rgba(111, 66, 193, 0.1);
       }
-      
+
       /* Pagination styling to match purple theme */
       .page-link {
         color: #6f42c1;
       }
-      
+
       .page-link:hover {
         color: #5c359a;
         background-color: rgba(111, 66, 193, 0.1);
         border-color: #6f42c1;
       }
-      
+
       .page-item.active .page-link {
         background-color: #6f42c1;
         border-color: #6f42c1;
         color: white;
       }
-      
+
       .page-item.active .page-link:hover {
         background-color: #5c359a;
         border-color: #5c359a;
       }
-      
+
       /* Make body a flex container with full height */
       html,
       body {
@@ -149,7 +149,7 @@
         background-color: rgba(255, 255, 255, 0.1);
         color: #6f42c1;
       }
-      
+
       /* Common detail page styles */
       .detail-header {
         display: flex;
@@ -159,7 +159,7 @@
         margin-top: 1.5rem;
         margin-bottom: 1rem;
       }
-      
+
       .detail-info-grid {
         display: flex;
         flex-direction: row;
@@ -169,18 +169,18 @@
         font-size: 1.1rem;
         min-width: 320px;
       }
-      
+
       .detail-info-label {
         color: #6c757d;
         font-size: 0.9em;
       }
-      
+
       .detail-code {
         font-size: 1.1rem;
         font-family: monospace;
         color: #888;
       }
-      
+
       /* Table cell content truncation - alternative to inline styles */
       .table-cell-content {
         max-width: 150px;
@@ -188,21 +188,21 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      
+
       .table-cell-content.wide {
         max-width: 200px;
       }
-      
+
       .table-cell-content.narrow {
         max-width: 100px;
       }
-      
+
       /* Common list page styles */
       .list-header {
         margin-top: 1.5rem;
         margin-bottom: 1rem;
       }
-      
+
       .list-title-row {
         display: flex;
         justify-content: space-between;
@@ -210,25 +210,25 @@
         flex-wrap: wrap;
         margin-bottom: 1rem;
       }
-      
+
       .list-search-form {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         flex-wrap: nowrap;
       }
-      
+
       .list-search-input {
         max-width: 300px;
         flex-shrink: 1;
       }
-      
+
       .list-search-form .btn {
         flex-shrink: 0;
         white-space: nowrap;
         min-width: auto;
       }
-      
+
       /* Filter form styles for complex list pages */
       .list-filter-form {
         display: flex;
@@ -236,64 +236,64 @@
         gap: 0.5rem;
         flex-wrap: nowrap;
       }
-      
+
       .list-filter-input {
         flex-shrink: 1;
       }
-      
+
       .list-filter-input.search {
         max-width: 200px;
       }
-      
+
       .list-filter-input.select {
         max-width: 150px;
       }
-      
+
       .list-filter-input.search-compact {
         max-width: 150px;
       }
-      
+
       .list-filter-form .btn {
         flex-shrink: 0;
         white-space: nowrap;
         min-width: auto;
       }
-      
+
       .list-filter-row {
         display: flex;
         align-items: center;
         gap: 1rem;
         flex-wrap: wrap;
       }
-      
+
       .list-filter-row .flex-grow-1 {
         flex-grow: 1;
       }
-      
+
       /* Card layouts for list items */
       .list-cards {
         margin-bottom: 2rem;
       }
-      
+
       .list-card {
         height: 100%;
         transition: transform 0.1s ease-in-out;
       }
-      
+
       .list-card:hover {
         transform: translateY(-2px);
       }
-      
+
       /* Table layouts for list items */
       .list-table-container {
         margin-bottom: 2rem;
       }
-      
+
       .clickable-row {
         cursor: pointer;
         transition: background-color 0.1s ease-in-out;
       }
-      
+
       .clickable-row:hover,
       .table-striped tbody .clickable-row:hover {
         background-color: rgba(111, 66, 193, 0.05) !important;
@@ -360,9 +360,7 @@
                   ></li
                 >
                 <li
-                  ><a
-                    class="dropdown-item {% if 'campus' in request.resolver_match.url_name %}active{% endif %}"
-                    href="{% url 'ustc:campus-list' %}"
+                  ><a class="dropdown-item {% if 'campus' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'ustc:campus-list' %}"
                     >{% trans "Campuses" %}</a
                   ></li
                 >
