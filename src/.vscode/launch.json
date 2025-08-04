@@ -25,6 +25,19 @@
                 "--all",
             ],
             "django": true
+        },
+        {
+            "name": "Python: Fetch Schedule",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "fetch_schedule"
+                // "--log-level",
+                // "DEBUG",
+                "--all"
+            ],
+            "django": true
         }
     ]
 }
