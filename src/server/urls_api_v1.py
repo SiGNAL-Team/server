@@ -6,29 +6,26 @@ This module handles all API v1 routes for different apps.
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from ustc import views
+from ustc.views import *
 
 # Create router for USTC app API endpoints
 router = DefaultRouter()
 
-# Register ViewSets for main models
-router.register(r'semester', views.SemesterViewSet, basename='semester')
-router.register(r'course', views.CourseViewSet, basename='course')
-router.register(r'section', views.SectionViewSet, basename='section')
-router.register(r'teacher', views.TeacherViewSet, basename='teacher')
-router.register(r'department', views.DepartmentViewSet, basename='department')
-router.register(r'campus', views.CampusViewSet, basename='campus')
-router.register(r'admin-class', views.AdminClassViewSet, basename='admin-class')
-
-# Register ViewSets for lookup/reference models
-router.register(r'course-type', views.CourseTypeViewSet, basename='course-type')
-router.register(r'course-gradation', views.CourseGradationViewSet, basename='course-gradation')
-router.register(r'course-category', views.CourseCategoryViewSet, basename='course-category')
-router.register(r'course-classify', views.CourseClassifyViewSet, basename='course-classify')
-router.register(r'exam-mode', views.ExamModeViewSet, basename='exam-mode')
-router.register(r'teach-language', views.TeachLanguageViewSet, basename='teach-language')
-router.register(r'education-level', views.EducationLevelViewSet, basename='education-level')
-router.register(r'class-type', views.ClassTypeViewSet, basename='class-type')
+router.register(r'semester', SemesterViewSet, basename='semester')
+router.register(r'course', CourseViewSet, basename='course')
+router.register(r'section', SectionViewSet, basename='section')
+router.register(r'teacher', TeacherViewSet, basename='teacher')
+router.register(r'department', DepartmentViewSet, basename='department')
+router.register(r'campus', CampusViewSet, basename='campus')
+router.register(r'admin-class', AdminClassViewSet, basename='admin-class')
+router.register(r'course-type', CourseTypeViewSet, basename='course-type')
+router.register(r'course-gradation', CourseGradationViewSet, basename='course-gradation')
+router.register(r'course-category', CourseCategoryViewSet, basename='course-category')
+router.register(r'course-classify', CourseClassifyViewSet, basename='course-classify')
+router.register(r'exam-mode', ExamModeViewSet, basename='exam-mode')
+router.register(r'teach-language', TeachLanguageViewSet, basename='teach-language')
+router.register(r'education-level', EducationLevelViewSet, basename='education-level')
+router.register(r'class-type', ClassTypeViewSet, basename='class-type')
 
 urlpatterns = [
     # Include all router URLs for USTC models
