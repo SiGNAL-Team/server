@@ -4,7 +4,51 @@
 {% load ustc_extras %}
 {% block title %}{{ section.course|translated_name }} - {% trans "Section Detail" %}{% endblock %}
 
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css" rel="stylesheet" />
+<style>
+  .calendar-container {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  .fc-event {
+    cursor: pointer;
+  }
+  .fc-event-title {
+    font-weight: 500;
+  }
+  #calendar {
+    height: 600px;
+  }
+  .event-details {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(111, 66, 193, 0.05);
+    border-radius: 5px;
+  }
+  /* Table styles for events list */
+  .schedule-table {
+    margin-top: 30px;
+  }
+  .schedule-table th {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .schedule-table-container {
+    max-height: 600px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+  }
+</style>
+{% endblock %}
+<!-- prettier-ignore -->
 {% block content %}
+<!-- prettier-ignore -->
 {% trans "N/A" as na_text %}
 
 <div class="mt-4 mb-3">
@@ -156,7 +200,367 @@
   <h4 class="mb-3">{% trans 'Schedule Information' %}</h4>
   <pre class="mb-4">{{ section.date_time_place_text }}</pre>
   {% endif %}
+
+  <h4 class="mb-3"> {% trans 'Course Schedule Calendar' %} </h4>
+  <ul class="nav nav-tabs mb-3" id="viewTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active"
+        id="calendar-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#calendar-panel"
+        type="button"
+        role="tab"
+        aria-controls="calendar-panel"
+        aria-selected="true"
+      >
+        {% trans 'Calendar View' %}
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="table-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#table-panel"
+        type="button"
+        role="tab"
+        aria-controls="table-panel"
+        aria-selected="false"
+      >
+        {% trans 'Table View' %}
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="viewTabsContent">
+    <div class="tab-pane fade show active" id="calendar-panel" role="tabpanel" aria-labelledby="calendar-tab">
+      <div class="calendar-container">
+        <div id="calendar-loading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">{% trans 'Loading schedule data...' %}</p>
+        </div>
+        <div id="calendar" style="display: none"></div>
+        <div id="calendar-error" class="alert alert-danger my-3" style="display: none">
+          {% trans 'Failed to load schedule data. Please try refreshing the page.' %}
+        </div>
+        <div id="calendar-empty" class="alert alert-info my-3" style="display: none">
+          {% trans 'No schedule information available for this section.' %}
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="table-panel" role="tabpanel" aria-labelledby="table-tab">
+      <div class="schedule-table-container">
+        <table class="table table-striped table-hover schedule-table">
+          <thead>
+            <tr>
+              <th>{% trans 'Date (Weekday)' %}</th>
+              <th>{% trans 'Time' %}</th>
+              <th>{% trans 'Location' %}</th>
+              <th>{% trans 'Custom Place' %}</th>
+              <th>{% trans 'Teacher' %}</th>
+              <th>{% trans 'Type' %}</th>
+            </tr>
+          </thead>
+          <tbody id="schedule-table-body">
+            <!-- Will be populated by JavaScript -->
+            <tr id="table-loading">
+              <td colspan="6" class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 mb-0">{% trans 'Loading schedule data...' %}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="table-error" class="alert alert-danger my-3" style="display: none">
+        {% trans 'Failed to load schedule data. Please try refreshing the page.' %}
+      </div>
+      <div id="table-empty" class="alert alert-info my-3" style="display: none">
+        {% trans 'No schedule information available for this section.' %}
+      </div>
+    </div>
+  </div>
+  <!-- Add spacer to prevent overlap with content below calendar -->
+  <div class="calendar-spacer"></div>
 </div>
 
-<!-- prettire-ignore -->
+<!-- prettier-ignore -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Utility functions for formatting dates and times
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toISOString().split('T')[0]; // YYYY-MM-DD
+    }
+
+    function formatTime(timeInt) {
+      // Convert integer like 830 to string "08:30"
+      if (typeof timeInt !== 'number') return '';
+
+      const hour = Math.floor(timeInt / 100);
+      const minute = timeInt % 100;
+      return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+    }
+
+    function getWeekdayName(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { weekday: 'short' });
+    }
+
+    function getWeekdayNameFromNumber(weekday) {
+      const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      return weekdays[weekday - 1] || '';
+    }
+
+    function formatLocation(roomData) {
+      if (!roomData) return '';
+
+      let location = roomData.name_cn || '';
+      if (roomData.building) {
+        const buildingName = roomData.building.name_cn || '';
+        location = buildingName ? `${buildingName} ${location}` : location;
+      }
+      return location;
+    }
+
+    // Convert raw schedules to calendar events
+    function convertToCalendarEvents(schedules) {
+      return schedules.map((schedule) => {
+        // Format times for ISO 8601 format
+        const startTime = formatTime(schedule.start_time);
+        const endTime = formatTime(schedule.end_time);
+
+        // Build title
+        let title = schedule.course ? schedule.course.name_cn : '';
+        const location = formatLocation(schedule.room);
+        if (location) {
+          title += ` - ${location}`;
+        }
+
+        // Build the event object for FullCalendar
+        return {
+          id: schedule.id,
+          title: title,
+          start: `${schedule.date}T${startTime}:00`,
+          end: `${schedule.date}T${endTime}:00`,
+          extendedProps: {
+            // Include all the raw data for easy access
+            ...schedule,
+            // Add formatted fields for convenience
+            formatted_location: location,
+            formatted_start_time: startTime,
+            formatted_end_time: endTime,
+            weekday_name: getWeekdayNameFromNumber(schedule.weekday),
+          },
+        };
+      });
+    }
+
+    // Fetch schedule data from API
+    fetch('/api/v1/ustc/section/{{ section.pk }}/schedules/')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((rawSchedules) => {
+        // Hide both loading spinners
+        document.getElementById('calendar-loading').style.display = 'none';
+        document.getElementById('table-loading').style.display = 'none';
+
+        if (!rawSchedules || rawSchedules.length === 0) {
+          // Show empty messages if no schedules
+          document.getElementById('calendar-empty').style.display = 'block';
+          document.getElementById('table-empty').style.display = 'block';
+          return;
+        }
+
+        // Convert raw schedules to calendar events
+        const calendarEvents = convertToCalendarEvents(rawSchedules);
+
+        // Show calendar and initialize it
+        document.getElementById('calendar').style.display = 'block';
+        initializeCalendar(calendarEvents);
+
+        // Populate table with raw schedule data
+        populateScheduleTable(rawSchedules);
+      })
+      .catch((error) => {
+        console.error('Error fetching schedule data:', error);
+        // Show error messages
+        document.getElementById('calendar-loading').style.display = 'none';
+        document.getElementById('calendar-error').style.display = 'block';
+        document.getElementById('calendar-error').textContent = 'Error: ' + error.message;
+        document.getElementById('table-loading').style.display = 'none';
+        document.getElementById('table-error').style.display = 'block';
+        document.getElementById('table-error').textContent = 'Error: ' + error.message;
+      });
+
+    // Initialize FullCalendar
+    function initializeCalendar(calendarEvents) {
+      const calendarEl = document.getElementById('calendar');
+
+      // Find date range to show in timeGridWeek view
+      let minDate = null;
+      let maxDate = null;
+
+      calendarEvents.forEach((event) => {
+        const eventDate = new Date(event.start.split('T')[0]);
+        if (!minDate || eventDate < minDate) minDate = new Date(eventDate);
+        if (!maxDate || eventDate > maxDate) maxDate = new Date(eventDate);
+      });
+
+      // Set initial date in the middle of the range
+      const initialDate = minDate ? new Date((minDate.getTime() + maxDate.getTime()) / 2) : new Date();
+
+      // Initialize calendar
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth', // Default to month view
+        initialDate: initialDate,
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek',
+        },
+        height: 'auto',
+        expandRows: true,
+        slotMinTime: '07:50:00', // Start time for day views
+        slotMaxTime: '21:55:00', // End time for day views
+        allDaySlot: false,
+        navLinks: true,
+        editable: false,
+        dayMaxEvents: true,
+        events: calendarEvents,
+        eventTimeFormat: {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        },
+        eventClick: function (info) {
+          // Get the raw data from extendedProps
+          const event = info.event;
+          const props = event.extendedProps;
+
+          // Build the tooltip content
+          let tooltipContent = `${event.title}<br>`;
+          tooltipContent += `Date: ${new Date(event.start).toLocaleDateString()}<br>`;
+          tooltipContent += `Time: ${props.formatted_start_time} - ${props.formatted_end_time}<br>`;
+
+          if (props.teacher) {
+            tooltipContent += `Teacher: ${props.teacher.name_cn}<br>`;
+          }
+
+          if (props.lesson_type) {
+            tooltipContent += `Type: ${props.lesson_type}<br>`;
+          }
+
+          if (props.custom_place) {
+            tooltipContent += `Custom Place: ${props.custom_place}`;
+          }
+
+          // Show tooltip
+          var tooltip = new bootstrap.Tooltip(info.el, {
+            title: tooltipContent,
+            html: true,
+            placement: 'top',
+            trigger: 'manual',
+          });
+          tooltip.show();
+
+          // Hide tooltip after 3 seconds
+          setTimeout(function () {
+            tooltip.hide();
+          }, 3000);
+        },
+      });
+
+      calendar.render();
+    }
+
+    // Populate schedule table
+    function populateScheduleTable(schedules) {
+      const tableBody = document.getElementById('schedule-table-body');
+      tableBody.innerHTML = ''; // Clear loading message
+
+      // Sort schedules by date and time
+      schedules.sort((a, b) => {
+        // Sort by date first
+        if (a.date < b.date) return -1;
+        if (a.date > b.date) return 1;
+
+        // Then by start_time
+        return a.start_time - b.start_time;
+      });
+
+      // Add each schedule as a row in the table
+      schedules.forEach((schedule) => {
+        // Format the date with weekday: YYYY-MM-DD (Weekday)
+        const dateObj = new Date(schedule.date);
+        const dateStr = schedule.date;
+        const weekdayStr = getWeekdayName(schedule.date);
+        const formattedDate = `${dateStr} (${weekdayStr})`;
+
+        // Format start and end times: HH:MM-HH:MM
+        const startTime = formatTime(schedule.start_time);
+        const endTime = formatTime(schedule.end_time);
+        const timeRange = `${startTime}-${endTime}`;
+
+        // Get location data
+        const location = formatLocation(schedule.room);
+        const customPlace = schedule.custom_place || '';
+
+        // Get teacher name
+        let teacherName = '';
+        if (schedule.teacher) {
+          teacherName = schedule.teacher.name_cn || '';
+          if (schedule.teacher.department) {
+            teacherName += ` (${schedule.teacher.department.name_cn})`;
+          }
+        }
+
+        // Get lesson type
+        const lessonType = schedule.lesson_type || '';
+
+        // Create table row
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${formattedDate}</td>
+          <td>${timeRange}</td>
+          <td>${location}</td>
+          <td>${customPlace}</td>
+          <td>${teacherName}</td>
+          <td>${lessonType}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Handle tab changes
+    const calendarTab = document.getElementById('calendar-tab');
+    const tableTab = document.getElementById('table-tab');
+
+    calendarTab.addEventListener('shown.bs.tab', function (event) {
+      // Force calendar to resize when its tab is shown
+      const calendarEl = document.getElementById('calendar');
+      if (calendarEl.querySelector('.fc')) {
+        const fcApi = calendarEl.querySelector('.fc').fcApi;
+        if (fcApi) {
+          setTimeout(() => fcApi.updateSize(), 10);
+        }
+      }
+    });
+  });
+</script>
 {% endblock %}

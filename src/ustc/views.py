@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
+from .views_extra import *
 
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -24,6 +25,11 @@ class BaseViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=404)
 
 
+class CampusViewSet(viewsets.ModelViewSet):
+    queryset = Campus.objects.all()
+    serializer_class = CampusSerializer
+
+
 class SemesterViewSet(BaseViewSet):
     queryset = Semester.objects.all()
     serializer_class = SemesterSerializer
@@ -32,11 +38,6 @@ class SemesterViewSet(BaseViewSet):
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-
-
-class CampusViewSet(viewsets.ModelViewSet):
-    queryset = Campus.objects.all()
-    serializer_class = CampusSerializer
 
 
 class CourseViewSet(BaseViewSet):
@@ -58,45 +59,18 @@ class SectionViewSet(BaseViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
+    @action(detail=True, methods=['get'])
+    def schedules(self, request, pk=None):
+        """Get schedules for a specific section using serializer"""
+        section = self.get_object()
+        schedules = Schedule.objects.filter(section=section).select_related(
+            'room', 'room__building', 'room__building__campus',
+            'teacher', 'teacher__department', 'schedule_group', 'section__course'
+        )
 
-class CourseTypeViewSet(viewsets.ModelViewSet):
-    queryset = CourseType.objects.all()
-    serializer_class = CourseTypeSerializer
-
-
-class CourseGradationViewSet(viewsets.ModelViewSet):
-    queryset = CourseGradation.objects.all()
-    serializer_class = CourseGradationSerializer
-
-
-class CourseCategoryViewSet(viewsets.ModelViewSet):
-    queryset = CourseCategory.objects.all()
-    serializer_class = CourseCategorySerializer
-
-
-class CourseClassifyViewSet(viewsets.ModelViewSet):
-    queryset = CourseClassify.objects.all()
-    serializer_class = CourseClassifySerializer
-
-
-class ExamModeViewSet(viewsets.ModelViewSet):
-    queryset = ExamMode.objects.all()
-    serializer_class = ExamModeSerializer
-
-
-class TeachLanguageViewSet(viewsets.ModelViewSet):
-    queryset = TeachLanguage.objects.all()
-    serializer_class = TeachLanguageSerializer
-
-
-class EducationLevelViewSet(viewsets.ModelViewSet):
-    queryset = EducationLevel.objects.all()
-    serializer_class = EducationLevelSerializer
-
-
-class ClassTypeViewSet(viewsets.ModelViewSet):
-    queryset = ClassType.objects.all()
-    serializer_class = ClassTypeSerializer
+        # Use the serializer to format the data
+        serializer = ScheduleSerializer(schedules, many=True)
+        return Response(serializer.data)
 
 
 def home(request):
@@ -111,105 +85,9 @@ def home(request):
     return render(request, 'ustc/home.html', context)
 
 
-# Generic list view function for models
-def generic_list_view(request, model_class, template_name, context_object_name, paginate_by=50):
-    """Generic function for list views"""
-    queryset = model_class.objects.all()
-
-    # Handle search
-    search_query = request.GET.get('q', '')
-    if search_query:
-        # This is a simplified search that assumes models have name_cn, name_en or name fields
-        # In a real application, you'd customize this per model
-        if hasattr(model_class, 'name_cn'):
-            queryset = queryset.filter(name_cn__icontains=search_query)
-        elif hasattr(model_class, 'name_en'):
-            queryset = queryset.filter(name_en__icontains=search_query)
-        elif hasattr(model_class, 'name'):
-            queryset = queryset.filter(name__icontains=search_query)
-        elif hasattr(model_class, 'code'):
-            queryset = queryset.filter(code__icontains=search_query)
-
-    paginator = Paginator(queryset, paginate_by)
-    page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        context_object_name: page_obj,
-        'page_obj': page_obj,
-        'search_query': search_query,
-    }
-    return render(request, template_name, context)
-
-# Generic detail view function for models
-
-
-def generic_detail_view(request, model_class, template_name, context_object_name, pk=None, jw_id=None):
-    """Generic function for detail views"""
-    if pk:
-        obj = get_object_or_404(model_class, pk=pk)
-    elif jw_id:
-        obj = get_object_or_404(model_class, jw_id=jw_id)
-    else:
-        return render(request, '404.html', {}, status=404)
-
-    context = {context_object_name: obj}
-    return render(request, template_name, context)
-
-# List views for each model
-
-
 def semester_list(request):
     return generic_list_view(
         request, Semester, 'ustc/semester_list.html', 'semesters'
-    )
-
-
-def course_type_list(request):
-    return generic_list_view(
-        request, CourseType, 'ustc/course_type_list.html', 'course_types'
-    )
-
-
-def course_gradation_list(request):
-    return generic_list_view(
-        request, CourseGradation, 'ustc/course_gradation_list.html', 'course_gradations'
-    )
-
-
-def course_category_list(request):
-    return generic_list_view(
-        request, CourseCategory, 'ustc/course_category_list.html', 'course_categories'
-    )
-
-
-def course_classify_list(request):
-    return generic_list_view(
-        request, CourseClassify, 'ustc/course_classify_list.html', 'course_classifies'
-    )
-
-
-def exam_mode_list(request):
-    return generic_list_view(
-        request, ExamMode, 'ustc/exam_mode_list.html', 'exam_modes'
-    )
-
-
-def teach_language_list(request):
-    return generic_list_view(
-        request, TeachLanguage, 'ustc/teach_language_list.html', 'teach_languages'
-    )
-
-
-def education_level_list(request):
-    return generic_list_view(
-        request, EducationLevel, 'ustc/education_level_list.html', 'education_levels'
-    )
-
-
-def class_type_list(request):
-    return generic_list_view(
-        request, ClassType, 'ustc/class_type_list.html', 'class_types'
     )
 
 
@@ -439,9 +317,13 @@ def admin_class_detail(request, pk):
 
 
 def section_detail(request, pk):
-    return generic_detail_view(
-        request, Section, 'ustc/section_detail.html', 'section', pk=pk
-    )
+    section = get_object_or_404(Section, pk=pk)
+    # We only load basic section data for the initial page load
+    # Schedule data will be loaded asynchronously via JavaScript
+    context = {
+        'section': section
+    }
+    return render(request, 'ustc/section_detail.html', context)
 
 
 def semester_detail_by_jw_id(request, jw_id):
@@ -463,6 +345,8 @@ def course_detail_by_jw_id(request, jw_id):
 
 
 def section_detail_by_jw_id(request, jw_id):
-    return generic_detail_view(
-        request, Section, 'ustc/section_detail.html', 'section', jw_id=jw_id
-    )
+    """Get section by JW ID and redirect to the main detail view"""
+    # Find the section by jw_id first
+    section = get_object_or_404(Section, jw_id=jw_id)
+    # Redirect to the main detail view using the primary key
+    return section_detail(request, pk=section.pk)
