@@ -200,6 +200,29 @@ class Section(models.Model):
     def __str__(self):
         return f"{self.code} - {self.course.name_cn} - {s.name if (s := self.semester) else ''}"
 
+    def to_ical(self):
+        """
+        Convert the section's schedule to an iCalendar format
+        Returns a string in iCalendar format
+        """
+        from .ical_utils import create_calendar, create_event_from_schedule
+
+        # Create calendar
+        cal_name = f"{self.course.code} {self.course.name_cn}"
+        description = f"Course: {self.course.name_cn} ({self.code})"
+        if self.semester:
+            description += f" - {self.semester.name}"
+
+        cal = create_calendar(cal_name, description)
+
+        # Add all schedules as events
+        schedules = Schedule.objects.filter(section=self)
+        for schedule in schedules:
+            event = create_event_from_schedule(schedule)
+            cal.add_component(event)
+
+        return cal.to_ical().decode('utf-8')
+
     class Meta:
         verbose_name_plural = "Sections"
         ordering = ['code', 'semester__start_date']
@@ -250,6 +273,25 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"Schedule for Section {self.section.code} on {self.date}"
+
+    def to_ical(self):
+        """
+        Convert this schedule to an iCalendar format
+        Returns a string in iCalendar format
+        """
+        from .ical_utils import create_calendar, create_event_from_schedule
+
+        # Create calendar
+        cal_name = f"{self.section.course.code} {self.section.course.name_cn} - {self.date}"
+        description = f"Schedule for {self.section.code} on {self.date}"
+
+        cal = create_calendar(cal_name, description)
+
+        # Add this schedule as an event
+        event = create_event_from_schedule(self)
+        cal.add_component(event)
+
+        return cal.to_ical().decode('utf-8')
 
     class Meta:
         verbose_name_plural = "Schedules"

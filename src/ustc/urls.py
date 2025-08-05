@@ -37,4 +37,8 @@ urlpatterns = [
     path('semester/jw-id/<int:jw_id>/', views.semester_detail_by_jw_id, name='semester-detail-by-jw-id'),
     path('course/jw-id/<int:jw_id>/', views.course_detail_by_jw_id, name='course-detail-by-jw-id'),
     path('section/jw-id/<int:jw_id>/', views.section_detail_by_jw_id, name='section-detail-by-jw-id'),
+
+    # iCalendar routes
+    path('section/<int:pk>/ical/', views.section_ical, name='section-ical'),
+    path('schedule/<int:pk>/ical/', views.schedule_ical, name='schedule-ical'),
 ]

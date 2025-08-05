@@ -26,11 +26,12 @@ router.register(r'exam-mode', ExamModeViewSet, basename='exam-mode')
 router.register(r'teach-language', TeachLanguageViewSet, basename='teach-language')
 router.register(r'education-level', EducationLevelViewSet, basename='education-level')
 router.register(r'class-type', ClassTypeViewSet, basename='class-type')
+router.register(r'schedules', ScheduleViewSet, basename='schedule')
 
 urlpatterns = [
     # Include all router URLs for USTC models
     # This automatically creates the following URL patterns:
-    # 
+
     # For all models:
     # - GET /<model>/: List all records with optional query parameters
     # - POST /<model>/: Create a new record

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.db import models
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -55,6 +56,34 @@ class AdminClassViewSet(viewsets.ModelViewSet):
     serializer_class = AdminClassSerializer
 
 
+class ScheduleViewSet(viewsets.ModelViewSet):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+
+    def get_schedule_ical_response(self, schedule):
+        """Helper to generate iCalendar file response for a schedule"""
+        try:
+            ical_content = schedule.to_ical()
+        except Exception as e:
+            return HttpResponse(
+                {"error": f"Failed to generate iCalendar: {str(e)}"},
+                content_type='application/json',
+                status=500
+            )
+        section_code = schedule.section.code
+        date_str = schedule.date.strftime('%Y%m%d')
+        filename = f"{section_code}_{date_str}.ics"
+        response = HttpResponse(ical_content, content_type='text/calendar')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+
+    @action(detail=True, methods=['get'])
+    def ical(self, request, pk=None):
+        """Export a single schedule as iCalendar"""
+        schedule = self.get_object()
+        return self.get_schedule_ical_response(schedule)
+
+
 class SectionViewSet(BaseViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
@@ -69,8 +98,18 @@ class SectionViewSet(BaseViewSet):
         )
 
         # Use the serializer to format the data
-        serializer = ScheduleSerializer(schedules, many=True)
+        serializer = ScheduleSerializer(schedules, many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def ical(self, request, pk=None):
+        """Export section schedules as iCalendar"""
+        section = self.get_object()
+        ical_content = section.to_ical()
+        course_code = section.course.code
+        section_code = section.code
+        filename = f"{course_code}_{section_code}.ics"
+        return generate_ical_response(ical_content, filename)
 
 
 def home(request):
@@ -350,3 +389,27 @@ def section_detail_by_jw_id(request, jw_id):
     section = get_object_or_404(Section, jw_id=jw_id)
     # Redirect to the main detail view using the primary key
     return section_detail(request, pk=section.pk)
+
+
+def generate_ical_response(ical_content, filename):
+    """Helper to return iCalendar content as a file download"""
+    response = HttpResponse(ical_content, content_type='text/calendar')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
+
+
+def section_ical(request, pk):
+    """Export section schedules as iCalendar (web view)"""
+    section = get_object_or_404(Section, pk=pk)
+    ical_content = section.to_ical()
+    course_code = section.course.code
+    section_code = section.code
+    filename = f"{course_code}_{section_code}.ics"
+    return generate_ical_response(ical_content, filename)
+
+
+def schedule_ical(request, pk):
+    """Export a single schedule as iCalendar (web view)"""
+    schedule = get_object_or_404(Schedule, pk=pk)
+    # Use the helper from ScheduleViewSet for consistent response
+    return ScheduleViewSet().get_schedule_ical_response(schedule)
