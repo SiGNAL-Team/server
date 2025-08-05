@@ -1,4 +1,8 @@
-pgdata/
-.env
+**/pgdata/
+**/data/
 
-**.pyc
+**/*.pyc
+**/*.sqlite
+**/*.mo
+**/.env
+**/.DS_Store
