@@ -4,7 +4,7 @@
         "../docker-compose.yml"
     ],
     "service": "web",
-    "workspaceFolder": "/app",
+    "workspaceFolder": "/workspace",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -13,12 +13,13 @@
                 "ms-azuretools.vscode-docker",
                 "GitHub.copilot",
                 "esbenp.prettier-vscode",
-                "samuelcolvin.jinjahtml"
+                "samuelcolvin.jinjahtml",
+                "eamodio.gitlens"
             ],
             "settings": {
                 "python.defaultInterpreterPath": "/usr/local/bin/python"
             }
         }
     },
-    "postCreateCommand": "apt-get update && apt-get install -y git && pip install -r requirements.txt"
+    "postCreateCommand": "apt-get update && apt-get install -y git"
 }
