@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-y*4^^4^$6mu+@%l95=e_c$3p(lj=$+=w^(*0q5=e&9=zhdq0+r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["signal.tiankaima.dev", "signal-dev.tiankaima.dev"]
 
 DATE_FORMAT = 'Y-m-d'
 
